@@ -81,7 +81,7 @@ const updateMyProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const accessToken= req.headers.authorization;
     const updatedData = req.body;
-    const result = await userService.updateMyProfile(accessToken, updatedData);
+    const result = await userService.updateMyProfile(accessToken as string, updatedData);
 
     sendResponse<IUser>(res, {
       statusCode: httpStatus.OK,
