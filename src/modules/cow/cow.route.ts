@@ -16,7 +16,7 @@ router.post(
 
 router.get(
   "/cows/:id", 
-  auth([userRoles.admin,userRoles.buyer,userRoles.admin]),
+  auth([userRoles.admin,userRoles.buyer,userRoles.seller]),
   cowsController.getSingleCow
 );
 router.delete(
