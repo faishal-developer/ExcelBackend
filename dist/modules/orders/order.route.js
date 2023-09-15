@@ -12,5 +12,6 @@ const Authorization_1 = require("../../shared/Authorization");
 const utils_1 = require("../../utils/utils");
 const router = express_1.default.Router();
 router.post("/orders", (0, validateRequests_1.validateRequest)(order_validation_1.orderZodValidation.createOrder), (0, Authorization_1.auth)([utils_1.userRoles.buyer]), orders_controller_1.ordersController.createOrder);
+router.get("/orders/:id", (0, Authorization_1.auth)([utils_1.userRoles.buyer]), orders_controller_1.ordersController.getSingleOrder);
 router.get("/orders", (0, Authorization_1.auth)([utils_1.userRoles.admin]), orders_controller_1.ordersController.getAllOrders);
 exports.OrderRoutes = router;

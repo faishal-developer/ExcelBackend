@@ -22,15 +22,15 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const createOrder = (order) => __awaiter(void 0, void 0, void 0, function* () {
     const buyer = yield user_model_1.User.findById({ _id: order.buyer });
     const cow = yield cow_model_1.CowModel.findById({ _id: order.cow });
-    if ((buyer && cow) && ((buyer === null || buyer === void 0 ? void 0 : buyer.budget) < (cow === null || cow === void 0 ? void 0 : cow.price))) {
+    if (buyer && cow && (buyer === null || buyer === void 0 ? void 0 : buyer.budget) < (cow === null || cow === void 0 ? void 0 : cow.price)) {
         throw new ApiError_1.default(http_status_1.default.NOT_ACCEPTABLE, "Buyer has not enough money");
         return null;
     }
-    else if ((!buyer || !cow)) {
+    else if (!buyer || !cow) {
         throw new ApiError_1.default(http_status_1.default.NOT_ACCEPTABLE, "Buyer or Cow does not exist");
         return null;
     }
-    else if (cow.label === 'sold out') {
+    else if (cow.label === "sold out") {
         throw new ApiError_1.default(http_status_1.default.NOT_ACCEPTABLE, "Cows allready sold out");
         return null;
     }
@@ -47,11 +47,15 @@ const createOrder = (order) => __awaiter(void 0, void 0, void 0, function* () {
         if (!newBuyer) {
             throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Buyer not found");
         }
-        const newSeller = yield user_model_1.User.findOneAndUpdate({ _id: cow.seller }, { income: cow.price }, Object.assign({ new: true }, options));
+        const newSeller = yield user_model_1.User.findOneAndUpdate({ _id: cow.seller }, {
+            $inc: {
+                income: cow.price,
+            },
+        }, Object.assign({ new: true }, options));
         if (!newSeller) {
             throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Seller not found");
         }
-        const newOrders = yield orders_model_1.OrderModel.create(order, options);
+        const newOrders = yield orders_model_1.OrderModel.create([order], options);
         newOrder = newOrders[0];
         yield session.commitTransaction();
         yield session.endSession();
@@ -67,7 +71,18 @@ const getAllOrders = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield orders_model_1.OrderModel.find({});
     return result;
 });
+const getSingleOrder = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield orders_model_1.OrderModel.findOne({ _id: id })
+        .populate("buyer")
+        .populate({
+        path: "cow",
+        populate: "seller",
+    });
+    console.log("result", result);
+    return result;
+});
 exports.OrderService = {
     createOrder,
-    getAllOrders
+    getAllOrders,
+    getSingleOrder,
 };

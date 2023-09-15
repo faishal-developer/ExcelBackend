@@ -3,6 +3,8 @@ import { catchAsync, sendResponse } from "../../shared/catchAsync";
 import httpStatus from "http-status";
 import { Iorder } from "./orders.interface";
 import { OrderService } from "./orders.service";
+import { verifyAccessToken } from "../../shared/commonFunction";
+import { JwtPayload } from "jsonwebtoken";
 
 const createOrder = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -32,8 +34,25 @@ const getAllOrders = catchAsync(
   }
 );
 
+const getSingleOrder = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const orderId = req.params.id;
+    const user: JwtPayload = verifyAccessToken(
+      req?.headers?.authorization as string
+    );
+    const result = await OrderService.getSingleOrder(user, orderId);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Order retrived successfully",
+      data: result,
+    });
+  }
+);
 
 export const ordersController = {
   createOrder,
   getAllOrders,
+  getSingleOrder,
 };

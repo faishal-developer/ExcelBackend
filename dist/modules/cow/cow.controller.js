@@ -32,7 +32,7 @@ const getAllCows = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
     (0, catchAsync_1.sendResponse)(res, {
         statusCode: 200,
         success: true,
-        message: "Cow created successfully",
+        message: "Cow retrived successfully",
         data: result,
     });
 }));
@@ -63,7 +63,7 @@ const deleteCow = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
     (0, catchAsync_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Student deleted successfully!",
+        message: "Cow deleted successfully!",
         data: result,
     });
 }));

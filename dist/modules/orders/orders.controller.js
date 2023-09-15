@@ -16,6 +16,7 @@ exports.ordersController = void 0;
 const catchAsync_1 = require("../../shared/catchAsync");
 const http_status_1 = __importDefault(require("http-status"));
 const orders_service_1 = require("./orders.service");
+const commonFunction_1 = require("../../shared/commonFunction");
 const createOrder = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const cowData = req.body;
     const result = yield orders_service_1.OrderService.createOrder(cowData);
@@ -36,7 +37,20 @@ const getAllOrders = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
         data: result,
     });
 }));
+const getSingleOrder = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const orderId = req.params.id;
+    const user = (0, commonFunction_1.verifyAccessToken)((_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization);
+    const result = yield orders_service_1.OrderService.getSingleOrder(user, orderId);
+    (0, catchAsync_1.sendResponse)(res, {
+        statusCode: 200,
+        success: true,
+        message: "Order retrived successfully",
+        data: result,
+    });
+}));
 exports.ordersController = {
     createOrder,
     getAllOrders,
+    getSingleOrder,
 };

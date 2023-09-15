@@ -14,11 +14,11 @@ router.post(
   ordersController.createOrder
 );
 
-
 router.get(
-  "/orders", 
-  auth([userRoles.admin]),
-  ordersController.getAllOrders
+  "/orders/:id",
+  auth([userRoles.buyer]),
+  ordersController.getSingleOrder
 );
+router.get("/orders", auth([userRoles.admin]), ordersController.getAllOrders);
 
 export const OrderRoutes = router;

@@ -4,10 +4,9 @@ import httpStatus from "http-status";
 import { CowService } from "./cow.service";
 import { Icow } from "./cow.interface";
 
-
 const createCow = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const cowData:Icow = req.body;
+    const cowData: Icow = req.body;
     const result = await CowService.createCow(cowData);
 
     sendResponse(res, {
@@ -21,13 +20,13 @@ const createCow = catchAsync(
 
 const getAllCows = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const queryData= req.query;
+    const queryData = req.query;
     const result = await CowService.getAllCows(queryData);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Cow created successfully",
+      message: "Cow retrived successfully",
       data: result,
     });
   }
@@ -70,7 +69,7 @@ const deleteCow = catchAsync(
     sendResponse<Icow>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Student deleted successfully!",
+      message: "Cow deleted successfully!",
       data: result,
     });
   }
