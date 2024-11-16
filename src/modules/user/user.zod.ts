@@ -19,19 +19,8 @@ const createUser = z.object({
       role: z.enum([...role] as [string, ...string[]], {
         required_error: "Role is required",
       }),
-      address: z.string({
-        required_error: "Address is required",
-      }),
-      budget: z.number().optional(),
-      income: z.number().optional(),
-    })
-    .refine((body) => {
-      if (body.role === "admin" && (body.budget!==undefined || body.income!==undefined)) {
-        throw new Error(`Zod error. Admin must not have any budget or income`);
-      } else if (body.role!=='admin' && (body.budget===undefined || body.income===undefined)) {
-        throw new Error("Zod error. User must have budget and income attribute");
-      }
-      return true;
+      traineeId: z.string().optional(),
+      trainerId: z.number().optional(),
     })
 });
 // {

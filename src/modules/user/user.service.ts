@@ -4,16 +4,44 @@ import { User, role } from "./user.model";
 import ApiError from "../../errorHandler/ApiError";
 import httpStatus from "http-status";
 import { verifyAccessToken } from "../../shared/commonFunction";
+import { userRoles } from "../../utils/utils";
+import { Trainee } from "../trainee/trainee.model";
+import { Trainer } from "../trainer/trainer.model";
 
 const createUser = async (user: IUser): Promise<IUser | null> => {
   const isExist = await User.findOne({
-    phoneNumber: user.phoneNumber,
+    email: user.email,
   });
   if (isExist) {
-    throw new ApiError(409, "Phone number is allready used");
+    throw new ApiError(409, "Email is allready used");
+  }
+  if(user.role===userRoles.admin){
+    throw new ApiError(409,"admin will not be created")
   }
   const result = await User.create(user);
+
+  let specificUser;
+  if(user.role===userRoles.trainee){
+    specificUser = await Trainee.create({
+      isMember:false,
+      userId:result._id,
+    });
+    User.findOneAndUpdate({ _id: result._id }, {traineeId:specificUser._id}, {
+      new: true,
+    });
+  }else{
+    specificUser = await Trainer.create({
+      userId:result._id,
+    });
+    User.findOneAndUpdate({ _id: result._id }, {trainerId:specificUser._id}, {
+      new: true,
+    });
+  }
+
+  
+
   const userData = result.toObject();
+
   return userData;
 };
 
@@ -76,8 +104,8 @@ const updateMyProfile = async (
   if (Object.keys(data).length <= 0) {
     throw new ApiError(404, "No content found to update");
   }
-  if (data.phoneNumber) {
-    throw new ApiError(409, "Please don't change phone number");
+  if (data.email) {
+    throw new ApiError(409, "Please don't change email");
   }
   const verifiedUser = verifyAccessToken(accessToken);
   console.log(verifiedUser);

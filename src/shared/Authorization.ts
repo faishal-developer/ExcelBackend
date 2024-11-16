@@ -16,6 +16,7 @@ export const auth = (
         if(roles.length && !roles.includes(verifiedUser.role)){
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
         }
+        // req.user = verifiedUser
         next();
     }catch(error){
         next(error);

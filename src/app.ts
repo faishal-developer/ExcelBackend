@@ -4,10 +4,12 @@ import cookieParser from "cookie-parser";
 import httpStatus from "http-status";
 import { globalErrorHandler } from "./middleWares/globalErrorHandler";
 import { UserRoutes } from "./modules/user/user.route";
-import { CowRoutes } from "./modules/cow/cow.route";
-import { OrderRoutes } from "./modules/orders/order.route";
+import { BookingRoutes } from "./modules/booking/bookings.route";
 import { AdminRoutes } from "./modules/admin/admin.route";
 import { AuthRoutes } from "./modules/Auth/auth.route";
+import { ScheduleRoutes } from "./modules/schedule/schedule.route";
+import { TraineeRoutes } from "./modules/trainee/trainee.route";
+import { TrainerRoutes } from "./modules/trainer/trainer.route";
 
 const app:Application = express();
 app.use(cors());
@@ -22,10 +24,12 @@ app.get('/',(_req:Request,res:Response)=>{
     res.json({message:"Everything is working"});
 })
 app.use('/api/v1',UserRoutes);
-app.use('/api/v1',CowRoutes);
-app.use('/api/v1',OrderRoutes);
+app.use('/api/v1',BookingRoutes);
+app.use('/api/v1',ScheduleRoutes);
 app.use('/api/v1',AdminRoutes);
 app.use('/api/v1',AuthRoutes);
+app.use('/api/v1',TraineeRoutes);
+app.use('/api/v1',TrainerRoutes);
 
 //globalErrorhandler
 app.use(globalErrorHandler)

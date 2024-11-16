@@ -1,29 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import httpStatus from "http-status";
-import { IQueryData, Icow } from "./cow.interface";
-import { CowModel } from "./cow.model";
+import { IQueryData, IBooking } from "./bookings.interface";
+import { BookingModel } from "./bookings.model";
 import ApiError from "../../errorHandler/ApiError";
 import { calcSkip } from "../../shared/commonFunction";
 import { SortOrder } from "mongoose";
 import { maxNumber } from "../../utils/utils";
-import { CowsSearchableFields } from "./cow.constant";
+import { BookingsSearchableFields } from "./bookings.constant";
 import { userService } from "../user/user.service";
 import { User } from "../user/user.model";
 
-const createCow = async (Cow: Icow): Promise<Icow | null> => {
-  const id = Cow.seller;
-  const user = await User.findById({_id:id});
-  if(user?.role==='buyer'){
-    throw new ApiError(httpStatus.NOT_FOUND,"Buyer can't sell a cow");
-  }
-  const result = await CowModel.create(Cow);
+const createBooking = async (Booking: IBooking): Promise<IBooking | null> => {
+  
+  const result = await BookingModel.create(Booking);
   return result;
 };
 
-const getAllCows = async (
+const getAllBookings = async (
   queryData: Partial<IQueryData>
-): Promise<Icow[] | null> => {
+): Promise<IBooking[] | null> => {
   const {
     page,
     limit,
@@ -45,7 +41,7 @@ const getAllCows = async (
   }
   //searchTerm
     if (searchTerm) {
-        query['$or'] = CowsSearchableFields.map((field) => ({
+        query['$or'] = BookingsSearchableFields.map((field) => ({
           [field]: {
             $regex: searchTerm,
             $options: "i",
@@ -60,42 +56,42 @@ const getAllCows = async (
     sortCondition[sortBy] = (sortOrder as TSort) ?? "asc";
   }
 
-  const result = await CowModel.find(query)
+  const result = await BookingModel.find(query)
     .sort(sortCondition)
     .skip(pagination.skip)
     .limit(pagination.limit);
   return result;
 };
 
-const getSingleCow = async (id: string): Promise<Icow | null> => {
-  const result = await CowModel.findById({ _id: id });
+const getSingleBooking = async (id: string): Promise<IBooking | null> => {
+  const result = await BookingModel.findById({ _id: id });
   return result;
 };
 
-const updateCow = async (
+const updateBooking = async (
   id: string,
-  data: Partial<Icow>
-): Promise<Icow | null> => {
-  const isExist = await CowModel.findById({ _id: id });
+  data: Partial<IBooking>
+): Promise<IBooking | null> => {
+  const isExist = await BookingModel.findById({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Cow not found !");
+    throw new ApiError(httpStatus.NOT_FOUND, "Booking not found !");
   }
-  const result = await CowModel.findOneAndUpdate({ _id: id }, data, {
+  const result = await BookingModel.findOneAndUpdate({ _id: id }, data, {
     new: true,
   });
   return result;
 };
 
-const deleteCow = async (id: string): Promise<Icow | null> => {
-  const result = await CowModel.findByIdAndDelete({ _id: id });
+const deleteBooking = async (id: string): Promise<IBooking | null> => {
+  const result = await BookingModel.findByIdAndDelete({ _id: id });
   return result;
 };
 
-export const CowService = {
-  createCow,
-  getAllCows,
-  getSingleCow,
-  updateCow,
-  deleteCow,
+export const BookingService = {
+  createBooking,
+  getAllBookings,
+  getSingleBooking,
+  updateBooking,
+  deleteBooking,
 };

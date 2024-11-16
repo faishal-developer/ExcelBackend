@@ -4,10 +4,10 @@ import { UserModel } from "./user.interface";
 import config from "../../config/config";
 import bcrypt from "bcrypt";
 
-export const role:Irole[]=["admin","seller", "buyer"];
+export const role:Irole[]=["admin","trainer", "trainee"];
 const userSchema = new Schema<IUser, UserModel>(
   {
-    phoneNumber: {
+    email: {
       type: String,
       required: true,
       unique:true
@@ -32,18 +32,15 @@ const userSchema = new Schema<IUser, UserModel>(
         required: true,
       },
     },
-    address: {
-      type: String,
-      required: true,
+    traineeId: {
+      type: Schema.Types.ObjectId,
+      ref:"Trainee"
     },
-    budget: {
+    trainerId: {
       type: Number,
-      // required: true,
+      ref:"Trainer"
     },
-    income: {
-      type: Number,
-      // required: true,
-    },
+    
   },
   {
     timestamps: true,

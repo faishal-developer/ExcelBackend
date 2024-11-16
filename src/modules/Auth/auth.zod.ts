@@ -5,8 +5,8 @@ const loginSchema = z.object({
     .object({
       password: z.string({ required_error: "Password is required" }),
       
-      phoneNumber: z.string({
-        required_error: "Phone Number is required",
+      email: z.string({
+        required_error: "Email is required",
       })
     })
 });

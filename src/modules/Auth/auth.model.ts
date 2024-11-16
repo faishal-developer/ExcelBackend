@@ -3,7 +3,7 @@ import { AuthModel, IAuth } from "./auth.interface";
 
 const userSchema = new Schema<IAuth, AuthModel>(
   {
-    phoneNumber: {
+    email: {
       type: String,
       required: true,
       unique:true

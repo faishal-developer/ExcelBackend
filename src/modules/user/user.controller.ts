@@ -16,7 +16,7 @@ const createUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=
     sendResponse<Partial<IUser>>(res, {
       statusCode: 200,
       success: true,
-      message: `${result?.role==='admin' ?"Admin" : 'User'} created successfully`,
+      message: `User created successfully`,
       data: result,
     });
 })

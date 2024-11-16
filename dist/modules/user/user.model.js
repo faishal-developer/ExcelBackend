@@ -25,7 +25,7 @@ const userSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        enum: exports.role,
+        enum: exports.role, // Specify the enum values here
         required: true,
     },
     password: {

@@ -1,84 +1,84 @@
 import { NextFunction, Request, Response } from "express";
 import { catchAsync, sendResponse } from "../../shared/catchAsync";
 import httpStatus from "http-status";
-import { CowService } from "./cow.service";
-import { Icow } from "./cow.interface";
+import { TraineeService } from "./trainee.service";
+import { ITrinee } from "./trainee.interface";
 
-const createCow = catchAsync(
+const createTrainee = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const cowData: Icow = req.body;
-    const result = await CowService.createCow(cowData);
+    const TraineeData: ITrinee = req.body;
+    const result = await TraineeService.createTrainee(TraineeData);
 
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
-      message: "Cow created successfully",
+      message: "Trainee created successfully",
       data: result,
     });
   }
 );
 
-const getAllCows = catchAsync(
+const getAllTrainees = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const queryData = req.query;
-    const result = await CowService.getAllCows(queryData);
+    const result = await TraineeService.getAllTrainees(queryData);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Cow retrived successfully",
+      message: "Trainee retrived successfully",
       data: result,
     });
   }
 );
 
-const getSingleCow = catchAsync(
+const getSingleTrainee = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const result = await CowService.getSingleCow(id);
+    const result = await TraineeService.getSingleTrainee(id);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: result == null ? "Failed to get" : "Cow retrived successfully",
+      message: result == null ? "Failed to get" : "Trainee retrived successfully",
       data: result,
     });
   }
 );
 
-const updateCow = catchAsync(
+const updateTrainee = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const updatedData = req.body;
-    const result = await CowService.updateCow(id, updatedData);
+    const result = await TraineeService.updateTrainee(id, updatedData);
 
-    sendResponse<Icow>(res, {
+    sendResponse<ITrinee>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Cow updated succefully",
+      message: "Trainee updated succefully",
       data: result,
     });
   }
 );
 
-const deleteCow = catchAsync(
+const deleteTrainee = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const result = await CowService.deleteCow(id);
+    const result = await TraineeService.deleteTrainee(id);
 
-    sendResponse<Icow>(res, {
+    sendResponse<ITrinee>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Cow deleted successfully!",
+      message: "Trainee deleted successfully!",
       data: result,
     });
   }
 );
 
-export const cowsController = {
-  createCow,
-  getAllCows,
-  getSingleCow,
-  updateCow,
-  deleteCow,
+export const TraineesController = {
+  createTrainee,
+  getAllTrainees,
+  getSingleTrainee,
+  updateTrainee,
+  deleteTrainee,
 };

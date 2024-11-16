@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import { IUser } from "../user/user.interface";
 
 export type IAuth={
-    phoneNumber:string;
+    email:string;
     password:string;
 }
 

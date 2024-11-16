@@ -1,17 +1,17 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
+import { Type } from "typescript";
 
-export type Irole ='seller' | 'buyer' | 'admin';
+export type Irole ='admin' | 'trainer' | 'trainee';
 export type IUser = {
-    phoneNumber:string;
+    email:string;
     role:Irole;
     password?:string;
     name:{
         firstName:string;
         lastName:string;
     };
-    address:string;
-    budget?:number;
-    income?:number;
+    traineeId?:Types.ObjectId;
+    trainerId?:Types.ObjectId
 }
 
 export type UserModel = {
