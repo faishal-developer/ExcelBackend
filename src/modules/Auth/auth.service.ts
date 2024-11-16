@@ -7,13 +7,13 @@ import { generateAccessToken, generateRefreashToken, verifyAccessToken, verifyRe
 import { IUser } from "../user/user.interface";
 
 const loginUser = async (payload: IAuth): Promise<AuthServiceresponseType> => {
-  const { phoneNumber, password } = payload;
-  const isUserExist = await User.isUserExist(phoneNumber);
+  const { email, password } = payload;
+  const isUserExist = await User.isUserExist(email);
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, "Wrong user or password ");
   }
   const response:Partial<IUser> = {
-    phoneNumber:isUserExist.phoneNumber,
+    email:isUserExist.email,
     role:isUserExist.role,
     name:isUserExist.name
   }
@@ -43,14 +43,14 @@ const refreshToken = async(token:string):Promise<refreshTokenResponse>=>{
     }catch(error){
         throw new ApiError(httpStatus.FORBIDDEN,"User is not authorized");
     }
-    const {phoneNumber} = verifiedToken;
-    const isUserExist = await User.isUserExist(phoneNumber);
+    const {email} = verifiedToken;
+    const isUserExist = await User.isUserExist(email);
     if(!isUserExist){
         throw new ApiError(httpStatus.NOT_FOUND, "User is not exist");
     }
 
     const newAccessToken = generateAccessToken({
-      phoneNumber: isUserExist.phoneNumber,
+      email: isUserExist.email,
       role: isUserExist.role,
       name: isUserExist.name,
     });

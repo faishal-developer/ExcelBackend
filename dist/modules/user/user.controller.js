@@ -25,7 +25,7 @@ const createUser = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
     (0, catchAsync_1.sendResponse)(res, {
         statusCode: 200,
         success: true,
-        message: `${(result === null || result === void 0 ? void 0 : result.role) === 'admin' ? "Admin" : 'User'} created successfully`,
+        message: `User created successfully`,
         data: result,
     });
 }));

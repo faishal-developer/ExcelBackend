@@ -6,8 +6,8 @@ const loginSchema = zod_1.z.object({
     body: zod_1.z
         .object({
         password: zod_1.z.string({ required_error: "Password is required" }),
-        phoneNumber: zod_1.z.string({
-            required_error: "Phone Number is required",
+        email: zod_1.z.string({
+            required_error: "Email is required",
         })
     })
 });

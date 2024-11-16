@@ -16,9 +16,9 @@ exports.User = exports.role = void 0;
 const mongoose_1 = require("mongoose");
 const config_1 = __importDefault(require("../../config/config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-exports.role = ["admin", "seller", "buyer"];
+exports.role = ["admin", "trainer", "trainee"];
 const userSchema = new mongoose_1.Schema({
-    phoneNumber: {
+    email: {
         type: String,
         required: true,
         unique: true
@@ -43,17 +43,13 @@ const userSchema = new mongoose_1.Schema({
             required: true,
         },
     },
-    address: {
-        type: String,
-        required: true,
+    traineeId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Trainee"
     },
-    budget: {
+    trainerId: {
         type: Number,
-        // required: true,
-    },
-    income: {
-        type: Number,
-        // required: true,
+        ref: "Trainer"
     },
 }, {
     timestamps: true,

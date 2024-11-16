@@ -17,14 +17,38 @@ const user_model_1 = require("./user.model");
 const ApiError_1 = __importDefault(require("../../errorHandler/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
 const commonFunction_1 = require("../../shared/commonFunction");
+const utils_1 = require("../../utils/utils");
+const trainee_model_1 = require("../trainee/trainee.model");
+const trainer_model_1 = require("../trainer/trainer.model");
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const isExist = yield user_model_1.User.findOne({
-        phoneNumber: user.phoneNumber,
+        email: user.email,
     });
     if (isExist) {
-        throw new ApiError_1.default(409, "Phone number is allready used");
+        throw new ApiError_1.default(409, "Email is allready used");
+    }
+    if (user.role === utils_1.userRoles.admin) {
+        throw new ApiError_1.default(409, "admin will not be created");
     }
     const result = yield user_model_1.User.create(user);
+    let specificUser;
+    if (user.role === utils_1.userRoles.trainee) {
+        specificUser = yield trainee_model_1.Trainee.create({
+            isMember: false,
+            userId: result._id,
+        });
+        user_model_1.User.findOneAndUpdate({ _id: result._id }, { traineeId: specificUser._id }, {
+            new: true,
+        });
+    }
+    else {
+        specificUser = yield trainer_model_1.Trainer.create({
+            userId: result._id,
+        });
+        user_model_1.User.findOneAndUpdate({ _id: result._id }, { trainerId: specificUser._id }, {
+            new: true,
+        });
+    }
     const userData = result.toObject();
     return userData;
 });
@@ -63,8 +87,8 @@ const updateMyProfile = (accessToken, data) => __awaiter(void 0, void 0, void 0,
     if (Object.keys(data).length <= 0) {
         throw new ApiError_1.default(404, "No content found to update");
     }
-    if (data.phoneNumber) {
-        throw new ApiError_1.default(409, "Please don't change phone number");
+    if (data.email) {
+        throw new ApiError_1.default(409, "Please don't change email");
     }
     const verifiedUser = (0, commonFunction_1.verifyAccessToken)(accessToken);
     console.log(verifiedUser);

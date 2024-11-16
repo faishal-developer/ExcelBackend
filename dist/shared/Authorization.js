@@ -27,6 +27,7 @@ const auth = (roles) => (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         if (roles.length && !roles.includes(verifiedUser.role)) {
             throw new ApiError_1.default(http_status_1.default.FORBIDDEN, "Forbidden");
         }
+        // req.user = verifiedUser
         next();
     }
     catch (error) {
