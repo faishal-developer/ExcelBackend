@@ -13,24 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ScheduleService = void 0;
+exports.FlightService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const schedule_model_1 = require("./schedule.model");
+const flight_model_1 = require("./flight.model");
 const ApiError_1 = __importDefault(require("../../errorHandler/ApiError"));
 const commonFunction_1 = require("../../shared/commonFunction");
 const utils_1 = require("../../utils/utils");
-const schedule_constant_1 = require("./schedule.constant");
-const createSchedule = (Schedule) => __awaiter(void 0, void 0, void 0, function* () {
-    let allSchedule = yield schedule_model_1.ScheduleModel.find({});
-    if (allSchedule.length >= 5) {
-        throw new ApiError_1.default(405, "Already 5 schedules are created");
+const flight_constant_1 = require("./flight.constant");
+const createFlight = (Flight) => __awaiter(void 0, void 0, void 0, function* () {
+    let allFlight = yield flight_model_1.FlightModel.find({});
+    if (allFlight.length >= 5) {
+        throw new ApiError_1.default(405, "Already 5 Flights are created");
     }
-    const result = yield schedule_model_1.ScheduleModel.create(Schedule);
+    const result = yield flight_model_1.FlightModel.create(Flight);
     return result;
 });
-const getAllSchedules = (queryData) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllFlights = (queryData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { page, limit, sortBy, sortOrder, minPrice = 0, maxPrice = utils_1.maxNumber, location, searchTerm, } = queryData;
+    const { page, limit, sortBy, sortOrder, minPrice = 0, maxPrice = utils_1.maxNumber, origin, destination, price, searchTerm, } = queryData;
     const pagination = (0, commonFunction_1.calcSkip)(page, limit);
     //searching
     let query = {};
@@ -41,7 +41,7 @@ const getAllSchedules = (queryData) => __awaiter(void 0, void 0, void 0, functio
     }
     //searchTerm
     if (searchTerm) {
-        query['$or'] = schedule_constant_1.SchedulesSearchableFields.map((field) => ({
+        query['$or'] = flight_constant_1.FlightsSearchableFields.map((field) => ({
             [field]: {
                 $regex: searchTerm,
                 $options: "i",
@@ -53,34 +53,34 @@ const getAllSchedules = (queryData) => __awaiter(void 0, void 0, void 0, functio
     if (sortBy) {
         sortCondition[sortBy] = (_a = sortOrder) !== null && _a !== void 0 ? _a : "asc";
     }
-    const result = yield schedule_model_1.ScheduleModel.find(query)
+    const result = yield flight_model_1.FlightModel.find(query)
         .sort(sortCondition)
         .skip(pagination.skip)
         .limit(pagination.limit);
     return result;
 });
-const getSingleSchedule = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield schedule_model_1.ScheduleModel.findById({ _id: id });
+const getSingleFlight = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield flight_model_1.FlightModel.findById({ _id: id });
     return result;
 });
-const updateSchedule = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const isExist = yield schedule_model_1.ScheduleModel.findById({ _id: id });
+const updateFlight = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const isExist = yield flight_model_1.FlightModel.findById({ _id: id });
     if (!isExist) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Schedule not found !");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Flight not found !");
     }
-    const result = yield schedule_model_1.ScheduleModel.findOneAndUpdate({ _id: id }, data, {
+    const result = yield flight_model_1.FlightModel.findOneAndUpdate({ _id: id }, data, {
         new: true,
     });
     return result;
 });
-const deleteSchedule = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield schedule_model_1.ScheduleModel.findByIdAndDelete({ _id: id });
+const deleteFlight = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield flight_model_1.FlightModel.findByIdAndDelete({ _id: id });
     return result;
 });
-exports.ScheduleService = {
-    createSchedule,
-    getAllSchedules,
-    getSingleSchedule,
-    updateSchedule,
-    deleteSchedule,
+exports.FlightService = {
+    createFlight,
+    getAllFlights,
+    getSingleFlight,
+    updateFlight,
+    deleteFlight,
 };

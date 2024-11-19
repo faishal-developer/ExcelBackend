@@ -7,9 +7,7 @@ import { UserRoutes } from "./modules/user/user.route";
 import { BookingRoutes } from "./modules/booking/bookings.route";
 import { AdminRoutes } from "./modules/admin/admin.route";
 import { AuthRoutes } from "./modules/Auth/auth.route";
-import { ScheduleRoutes } from "./modules/flight/flight.route";
-import { TraineeRoutes } from "./modules/trainee/trainee.route";
-import { TrainerRoutes } from "./modules/trainer/trainer.route";
+import { FlightRoutes } from "./modules/flight/flight.route";
 
 const app:Application = express();
 app.use(cors());
@@ -25,11 +23,9 @@ app.get('/',(_req:Request,res:Response)=>{
 })
 app.use('/api/v1',UserRoutes);
 app.use('/api/v1',BookingRoutes);
-app.use('/api/v1',ScheduleRoutes);
+app.use('/api/v1',FlightRoutes);
 app.use('/api/v1',AdminRoutes);
 app.use('/api/v1',AuthRoutes);
-app.use('/api/v1',TraineeRoutes);
-app.use('/api/v1',TrainerRoutes);
 
 //globalErrorhandler
 app.use(globalErrorHandler)

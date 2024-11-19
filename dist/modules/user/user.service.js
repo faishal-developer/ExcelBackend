@@ -18,8 +18,6 @@ const ApiError_1 = __importDefault(require("../../errorHandler/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
 const commonFunction_1 = require("../../shared/commonFunction");
 const utils_1 = require("../../utils/utils");
-const trainee_model_1 = require("../trainee/trainee.model");
-const trainer_model_1 = require("../trainer/trainer.model");
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const isExist = yield user_model_1.User.findOne({
         email: user.email,
@@ -31,24 +29,6 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         throw new ApiError_1.default(409, "admin will not be created");
     }
     const result = yield user_model_1.User.create(user);
-    let specificUser;
-    if (user.role === utils_1.userRoles.trainee) {
-        specificUser = yield trainee_model_1.Trainee.create({
-            isMember: false,
-            userId: result._id,
-        });
-        user_model_1.User.findOneAndUpdate({ _id: result._id }, { traineeId: specificUser._id }, {
-            new: true,
-        });
-    }
-    else {
-        specificUser = yield trainer_model_1.Trainer.create({
-            userId: result._id,
-        });
-        user_model_1.User.findOneAndUpdate({ _id: result._id }, { trainerId: specificUser._id }, {
-            new: true,
-        });
-    }
     const userData = result.toObject();
     return userData;
 });
@@ -62,7 +42,7 @@ const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getMyProfile = (accessToken) => __awaiter(void 0, void 0, void 0, function* () {
     const verifiedUser = (0, commonFunction_1.verifyAccessToken)(accessToken);
-    const result = yield user_model_1.User.findOne({ phoneNumber: verifiedUser.phoneNumber }, "name phoneNumber address");
+    const result = yield user_model_1.User.findOne({ email: verifiedUser.email }, "name email address");
     return result;
 });
 const updateUser = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -93,7 +73,7 @@ const updateMyProfile = (accessToken, data) => __awaiter(void 0, void 0, void 0,
     const verifiedUser = (0, commonFunction_1.verifyAccessToken)(accessToken);
     console.log(verifiedUser);
     const isExist = yield user_model_1.User.findOne({
-        phoneNumber: verifiedUser.phoneNumber,
+        email: verifiedUser.email,
     });
     if (!isExist) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found !");
@@ -116,7 +96,7 @@ const updateMyProfile = (accessToken, data) => __awaiter(void 0, void 0, void 0,
     //     "User should not be modified into admin"
     //   );
     // }
-    const result = yield user_model_1.User.findOneAndUpdate({ phoneNumber: verifiedUser.phoneNumber }, data, {
+    const result = yield user_model_1.User.findOneAndUpdate({ email: verifiedUser.email }, data, {
         new: true,
     });
     return result;

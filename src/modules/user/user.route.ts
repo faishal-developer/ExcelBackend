@@ -15,14 +15,14 @@ router.post(
 
 router.get(
   "/users/my-profile",
-  auth([userRoles.trainee, userRoles.trainer]),
+  auth([userRoles.admin, userRoles.user]),
   userController.getMyProfile
 );
 
 router.patch(
   "/users/my-profile",
   validateRequest(userZodValidataion.updateUser),
-  auth([userRoles.trainee, userRoles.trainer]),
+  auth([userRoles.admin, userRoles.user]),
   userController.updateMyProfile
 );
 

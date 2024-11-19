@@ -12,9 +12,7 @@ const user_route_1 = require("./modules/user/user.route");
 const bookings_route_1 = require("./modules/booking/bookings.route");
 const admin_route_1 = require("./modules/admin/admin.route");
 const auth_route_1 = require("./modules/Auth/auth.route");
-const schedule_route_1 = require("./modules/schedule/schedule.route");
-const trainee_route_1 = require("./modules/trainee/trainee.route");
-const trainer_route_1 = require("./modules/trainer/trainer.route");
+const flight_route_1 = require("./modules/flight/flight.route");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
@@ -27,11 +25,9 @@ app.get('/', (_req, res) => {
 });
 app.use('/api/v1', user_route_1.UserRoutes);
 app.use('/api/v1', bookings_route_1.BookingRoutes);
-app.use('/api/v1', schedule_route_1.ScheduleRoutes);
+app.use('/api/v1', flight_route_1.FlightRoutes);
 app.use('/api/v1', admin_route_1.AdminRoutes);
 app.use('/api/v1', auth_route_1.AuthRoutes);
-app.use('/api/v1', trainee_route_1.TraineeRoutes);
-app.use('/api/v1', trainer_route_1.TrainerRoutes);
 //globalErrorhandler
 app.use(globalErrorHandler_1.globalErrorHandler);
 //unknown route handler

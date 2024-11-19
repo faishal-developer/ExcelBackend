@@ -4,6 +4,5 @@ exports.userRoles = exports.maxNumber = void 0;
 exports.maxNumber = Number.MAX_SAFE_INTEGER;
 exports.userRoles = {
     admin: 'admin',
-    trainer: 'trainer',
-    trainee: "trainee"
+    user: 'user',
 };

@@ -18,7 +18,6 @@ const http_status_1 = __importDefault(require("http-status"));
 const bookings_model_1 = require("./bookings.model");
 const ApiError_1 = __importDefault(require("../../errorHandler/ApiError"));
 const commonFunction_1 = require("../../shared/commonFunction");
-const utils_1 = require("../../utils/utils");
 const bookings_constant_1 = require("./bookings.constant");
 const createBooking = (Booking) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield bookings_model_1.BookingModel.create(Booking);
@@ -26,12 +25,11 @@ const createBooking = (Booking) => __awaiter(void 0, void 0, void 0, function* (
 });
 const getAllBookings = (queryData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { page, limit, sortBy, sortOrder, minPrice = 0, maxPrice = utils_1.maxNumber, location, searchTerm, } = queryData;
+    const { page, limit, sortBy, sortOrder, searchTerm, } = queryData;
     const pagination = (0, commonFunction_1.calcSkip)(page, limit);
     //searching
     let query = {};
     //pricing
-    query.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
     if (location) {
         query.location = location;
     }

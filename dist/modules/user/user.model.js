@@ -16,7 +16,7 @@ exports.User = exports.role = void 0;
 const mongoose_1 = require("mongoose");
 const config_1 = __importDefault(require("../../config/config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-exports.role = ["admin", "trainer", "trainee"];
+exports.role = ["admin", "user"];
 const userSchema = new mongoose_1.Schema({
     email: {
         type: String,
@@ -34,32 +34,18 @@ const userSchema = new mongoose_1.Schema({
         select: false
     },
     name: {
-        firstName: {
-            type: String,
-            required: true,
-        },
-        lastName: {
-            type: String,
-            required: true,
-        },
-    },
-    traineeId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Trainee"
-    },
-    trainerId: {
-        type: Number,
-        ref: "Trainer"
-    },
+        type: String,
+        required: true,
+    }
 }, {
     timestamps: true,
     toJSON: {
         virtuals: true,
     },
 });
-userSchema.statics.isUserExist = function (phoneNumber) {
+userSchema.statics.isUserExist = function (email) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield exports.User.findOne({ phoneNumber }, { password: 1, role: 1, name: 1, phoneNumber: 1 });
+        return yield exports.User.findOne({ email }, { password: 1, role: 1, name: 1, email: 1 });
     });
 };
 userSchema.pre("save", function (next) {
