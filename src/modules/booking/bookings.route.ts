@@ -10,30 +10,30 @@ const router = express.Router();
 router.post(
   "/bookings",
   validateRequest(BookingsZodValidataion.createBooking),
-  auth([userRoles.trainee]),
+  auth([userRoles.user]),
   BookingsController.createBooking
 );
 
 router.get(
   "/bookings/:id", 
-  auth([userRoles.admin,userRoles.trainee,userRoles.trainer]),
+  auth([userRoles.admin,userRoles.user]),
   BookingsController.getSingleBooking
 );
 router.delete(
   "/bookings/:id", 
-  auth([userRoles.trainee]), 
+  auth([userRoles.admin]), 
   BookingsController.deleteBooking
 );
 router.patch(
   "/bookings/:id",
   validateRequest(BookingsZodValidataion.updateBooking),
-  auth([userRoles.trainee]),
+  auth([userRoles.admin]),
   BookingsController.updateBooking
 );
 
 router.get(
   "/bookings", 
-  auth([userRoles.admin,userRoles.trainee]),
+  auth([userRoles.admin,userRoles.user]),
   BookingsController.getAllBookings
 );
 

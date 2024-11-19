@@ -3,14 +3,17 @@ import { z } from "zod";
 
 const createBooking = z.object({
   body: z.object({
-    scheduleId: z.string({
-      required_error: "scheduleId is required",
-    }),
     userId: z.string({
       required_error: "userId is required",
     }),
-    price: z.number({
-      required_error: "price is required",
+    flightId: z.number({
+      required_error: "flightId is required",
+    }),
+    totalPrice: z.number({
+      required_error: "totalPrice is required",
+    }),
+    seatNumber: z.number({
+      required_error: "seatNumber is required",
     }),
 
   }),
@@ -19,9 +22,11 @@ const createBooking = z.object({
 
 const updateBooking = z.object({
   body: z.object({
-    scheduleId: z.string().optional(),
     userId: z.string().optional(),
-    price: z.number().optional()
+    flightId: z.string().optional(),
+    totalPrice: z.number().optional(),
+    seatNumber: z.number().optional(),
+    status: z.number().optional()
   }),
 });
 

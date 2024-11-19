@@ -1,9 +1,11 @@
 import { Model, Types } from "mongoose";
 
 export type IBooking = {
-    scheduleId:Types.ObjectId;
     userId:Types.ObjectId;
-    price:number;
+    flightId:Types.ObjectId;
+    totalPrice:number;
+    seatNumber:number;
+    status:string;
 }
 
 export type IBookingModel = Model<IBooking,Record<string,unknown>>;
@@ -13,9 +15,7 @@ export type IQueryData= {
     limit?:string,
     sortBy?:string,
     sortOrder?:string,
-    minPrice?:string,
-    maxPrice?:string,
-    location?:string,
+    totalPrice?:number,
+    status?:string,
     searchTerm?:string,
-    price?:string
 }

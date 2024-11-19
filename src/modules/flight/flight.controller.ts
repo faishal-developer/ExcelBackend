@@ -1,84 +1,84 @@
 import { NextFunction, Request, Response } from "express";
 import { catchAsync, sendResponse } from "../../shared/catchAsync";
 import httpStatus from "http-status";
-import { TraineeService } from "./trainee.service";
-import { ITrinee } from "./trainee.interface";
+import { FlightService } from "./flight.service";
+import { IFlight } from "./flight.interface";
 
-const createTrainee = catchAsync(
+const createFlight = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const TraineeData: ITrinee = req.body;
-    const result = await TraineeService.createTrainee(TraineeData);
+    const FlightData: IFlight = req.body;
+    const result = await FlightService.createFlight(FlightData);
 
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
-      message: "Trainee created successfully",
+      message: "Flight created successfully",
       data: result,
     });
   }
 );
 
-const getAllTrainees = catchAsync(
+const getAllFlights = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const queryData = req.query;
-    const result = await TraineeService.getAllTrainees(queryData);
+    const result = await FlightService.getAllFlights(queryData);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Trainee retrived successfully",
+      message: "Flight retrived successfully",
       data: result,
     });
   }
 );
 
-const getSingleTrainee = catchAsync(
+const getSingleFlight = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const result = await TraineeService.getSingleTrainee(id);
+    const result = await FlightService.getSingleFlight(id);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: result == null ? "Failed to get" : "Trainee retrived successfully",
+      message: result == null ? "Failed to get" : "Flight retrived successfully",
       data: result,
     });
   }
 );
 
-const updateTrainee = catchAsync(
+const updateFlight = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const updatedData = req.body;
-    const result = await TraineeService.updateTrainee(id, updatedData);
+    const result = await FlightService.updateFlight(id, updatedData);
 
-    sendResponse<ITrinee>(res, {
+    sendResponse<IFlight>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Trainee updated succefully",
+      message: "Flight updated succefully",
       data: result,
     });
   }
 );
 
-const deleteTrainee = catchAsync(
+const deleteFlight = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const result = await TraineeService.deleteTrainee(id);
+    const result = await FlightService.deleteFlight(id);
 
-    sendResponse<ITrinee>(res, {
+    sendResponse<IFlight>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Trainee deleted successfully!",
+      message: "Flight deleted successfully!",
       data: result,
     });
   }
 );
 
-export const TraineesController = {
-  createTrainee,
-  getAllTrainees,
-  getSingleTrainee,
-  updateTrainee,
-  deleteTrainee,
+export const FlightsController = {
+  createFlight,
+  getAllFlights,
+  getSingleFlight,
+  updateFlight,
+  deleteFlight,
 };

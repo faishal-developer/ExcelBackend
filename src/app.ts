@@ -7,7 +7,7 @@ import { UserRoutes } from "./modules/user/user.route";
 import { BookingRoutes } from "./modules/booking/bookings.route";
 import { AdminRoutes } from "./modules/admin/admin.route";
 import { AuthRoutes } from "./modules/Auth/auth.route";
-import { ScheduleRoutes } from "./modules/schedule/schedule.route";
+import { ScheduleRoutes } from "./modules/flight/flight.route";
 import { TraineeRoutes } from "./modules/trainee/trainee.route";
 import { TrainerRoutes } from "./modules/trainer/trainer.route";
 

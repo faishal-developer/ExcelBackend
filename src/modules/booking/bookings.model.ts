@@ -4,18 +4,25 @@ import { IBookingModel, IBooking } from "./bookings.interface";
 
 const BookingSchema = new Schema<IBooking, object>(
   {
-    scheduleId: {
-      type: Schema.Types.ObjectId,
-      ref: "Schedule",
-      required:true
-    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required:true,
     },
-    price: {
+   flightId: {
+      type: Schema.Types.ObjectId,
+      required:true
+    },
+    totalPrice: {
       type: Number,
+      required:true
+    },
+    seatNumber: {
+      type: Number,
+      required:true
+    },
+    status: {
+      type: String,
       required:true
     },
   },

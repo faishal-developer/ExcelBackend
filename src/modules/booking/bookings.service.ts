@@ -25,9 +25,6 @@ const getAllBookings = async (
     limit,
     sortBy,
     sortOrder,
-    minPrice = 0,
-    maxPrice = maxNumber,
-    location,
     searchTerm,
   } = queryData;
   const pagination = calcSkip(page, limit);
@@ -35,7 +32,6 @@ const getAllBookings = async (
   //searching
   let query:any = {};
   //pricing
-  query.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
   if(location){
     query.location = location;
   }

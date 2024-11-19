@@ -4,7 +4,7 @@ import { UserModel } from "./user.interface";
 import config from "../../config/config";
 import bcrypt from "bcrypt";
 
-export const role:Irole[]=["admin","trainer", "trainee"];
+export const role:Irole[]=["admin","user"];
 const userSchema = new Schema<IUser, UserModel>(
   {
     email: {
@@ -23,23 +23,9 @@ const userSchema = new Schema<IUser, UserModel>(
       select:false
     },
     name: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-    },
-    traineeId: {
-      type: Schema.Types.ObjectId,
-      ref:"Trainee"
-    },
-    trainerId: {
-      type: Number,
-      ref:"Trainer"
-    },
+      type: String,
+      required: true,
+    }
     
   },
   {
@@ -50,11 +36,11 @@ const userSchema = new Schema<IUser, UserModel>(
   }
 );
 userSchema.statics.isUserExist = async function(
-  phoneNumber:string
+  email:string
 ):Promise<IUser|null>{
   return await User.findOne(
-    {phoneNumber},
-    {password:1,role:1,name:1,phoneNumber:1}
+    {email},
+    {password:1,role:1,name:1,email:1}
   )
 }
 userSchema.pre("save", async function (next) {

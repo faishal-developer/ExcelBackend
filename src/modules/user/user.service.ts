@@ -5,8 +5,7 @@ import ApiError from "../../errorHandler/ApiError";
 import httpStatus from "http-status";
 import { verifyAccessToken } from "../../shared/commonFunction";
 import { userRoles } from "../../utils/utils";
-import { Trainee } from "../trainee/trainee.model";
-import { Trainer } from "../trainer/trainer.model";
+
 
 const createUser = async (user: IUser): Promise<IUser | null> => {
   const isExist = await User.findOne({
@@ -19,26 +18,6 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
     throw new ApiError(409,"admin will not be created")
   }
   const result = await User.create(user);
-
-  let specificUser;
-  if(user.role===userRoles.trainee){
-    specificUser = await Trainee.create({
-      isMember:false,
-      userId:result._id,
-    });
-    User.findOneAndUpdate({ _id: result._id }, {traineeId:specificUser._id}, {
-      new: true,
-    });
-  }else{
-    specificUser = await Trainer.create({
-      userId:result._id,
-    });
-    User.findOneAndUpdate({ _id: result._id }, {trainerId:specificUser._id}, {
-      new: true,
-    });
-  }
-
-  
 
   const userData = result.toObject();
 
@@ -58,8 +37,8 @@ const getSingleUser = async (id: string): Promise<IUser | null> => {
 const getMyProfile = async (accessToken: string) => {
   const verifiedUser = verifyAccessToken(accessToken);
   const result = await User.findOne(
-    { phoneNumber: verifiedUser.phoneNumber },
-    "name phoneNumber address"
+    { email: verifiedUser.email },
+    "name email address"
   );
   return result;
 };
@@ -111,7 +90,7 @@ const updateMyProfile = async (
   console.log(verifiedUser);
 
   const isExist: IUser | null = await User.findOne({
-    phoneNumber: verifiedUser.phoneNumber,
+    email: verifiedUser.email,
   });
 
   if (!isExist) {
@@ -136,7 +115,7 @@ const updateMyProfile = async (
   //   );
   // }
   const result = await User.findOneAndUpdate(
-    { phoneNumber: verifiedUser.phoneNumber },
+    { email: verifiedUser.email },
     data,
     {
       new: true,

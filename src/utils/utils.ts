@@ -4,6 +4,5 @@ export const maxNumber = Number.MAX_SAFE_INTEGER;
 
 export const userRoles={
     admin:'admin',
-    trainer:'trainer',
-    trainee:"trainee"
+    user:'user',
 }
