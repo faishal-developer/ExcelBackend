@@ -10,7 +10,7 @@ const createUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=
     const userData = req.body;
     const result = await userService.createUser(userData);
     
-    if(result){
+    if(result?.password){
       delete result.password;
     }
     sendResponse<Partial<IUser>>(res, {

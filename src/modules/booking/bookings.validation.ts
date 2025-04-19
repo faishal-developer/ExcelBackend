@@ -6,7 +6,7 @@ const createBooking = z.object({
     userId: z.string({
       required_error: "userId is required",
     }),
-    flightId: z.number({
+    flightId: z.string({
       required_error: "flightId is required",
     }),
     totalPrice: z.number({

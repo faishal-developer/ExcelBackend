@@ -7,7 +7,7 @@ import { UserRoutes } from "./modules/user/user.route";
 import { BookingRoutes } from "./modules/booking/bookings.route";
 import { AdminRoutes } from "./modules/admin/admin.route";
 import { AuthRoutes } from "./modules/Auth/auth.route";
-import { FlightRoutes } from "./modules/flight/flight.route";
+import { FlightRoutes } from "./modules/bus/bus.route";
 
 const app:Application = express();
 app.use(cors());

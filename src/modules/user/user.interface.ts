@@ -5,7 +5,7 @@ export type Irole ='admin' | 'user';
 export type IUser = {
     email:string;
     role:Irole;
-    password?:string;
+    password:string;
     name:string;
 }
 

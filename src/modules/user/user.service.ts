@@ -8,15 +8,17 @@ import { userRoles } from "../../utils/utils";
 
 
 const createUser = async (user: IUser): Promise<IUser | null> => {
-  const isExist = await User.findOne({
-    email: user.email,
-  });
-  if (isExist) {
-    throw new ApiError(409, "Email is allready used");
-  }
   if(user.role===userRoles.admin){
     throw new ApiError(409,"admin will not be created")
   }
+
+  // const isExist = await User.findOne({
+  //   email: user.email,
+  // });
+  // if (isExist) {
+  //   throw new ApiError(409, "Email is allready used");
+  // }
+  
   const result = await User.create(user);
 
   const userData = result.toObject();
@@ -53,21 +55,11 @@ const updateUser = async (
     throw new ApiError(httpStatus.NOT_FOUND, "User not found !");
   }
   if (
-    isExist.role === "admin" &&
-    (data.role === role[1] || data.role === role[2])
+    data.role
   ) {
     throw new ApiError(
       httpStatus.METHOD_NOT_ALLOWED,
-      "Admin should not be modified"
-    );
-  }
-  if (
-    (isExist.role === role[1] || isExist.role === role[2]) &&
-    data.role === "admin"
-  ) {
-    throw new ApiError(
-      httpStatus.METHOD_NOT_ALLOWED,
-      "User should not be modified into admin"
+      "Role should not be modified"
     );
   }
   const result = await User.findOneAndUpdate({ _id: id }, data, {

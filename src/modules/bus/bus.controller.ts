@@ -1,84 +1,84 @@
 import { NextFunction, Request, Response } from "express";
 import { catchAsync, sendResponse } from "../../shared/catchAsync";
 import httpStatus from "http-status";
-import { FlightService } from "./flight.service";
-import { IFlight } from "./flight.interface";
+import { BusService } from "./bus.service";
+import { IBus } from "./bus.interface";
 
-const createFlight = catchAsync(
+const createBus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const FlightData: IFlight = req.body;
-    const result = await FlightService.createFlight(FlightData);
+    const BusData: IBus = req.body;
+    const result = await BusService.createBus(BusData);
 
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
-      message: "Flight created successfully",
+      message: "Bus created successfully",
       data: result,
     });
   }
 );
 
-const getAllFlights = catchAsync(
+const getAllBus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const queryData = req.query;
-    const result = await FlightService.getAllFlights(queryData);
+    const result = await BusService.getAllBuss(queryData);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Flight retrived successfully",
+      message: "Bus retrived successfully",
       data: result,
     });
   }
 );
 
-const getSingleFlight = catchAsync(
+const getSingleBus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const result = await FlightService.getSingleFlight(id);
+    const result = await BusService.getSingleBus(id);
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: result == null ? "Failed to get" : "Flight retrived successfully",
+      message: result == null ? "Failed to get" : "Bus retrived successfully",
       data: result,
     });
   }
 );
 
-const updateFlight = catchAsync(
+const updateBus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const updatedData = req.body;
-    const result = await FlightService.updateFlight(id, updatedData);
+    const result = await BusService.updateBus(id, updatedData);
 
-    sendResponse<IFlight>(res, {
+    sendResponse<IBus>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Flight updated succefully",
+      message: "Bus updated succefully",
       data: result,
     });
   }
 );
 
-const deleteFlight = catchAsync(
+const deleteBus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const result = await FlightService.deleteFlight(id);
+    const result = await BusService.deleteBus(id);
 
-    sendResponse<IFlight>(res, {
+    sendResponse<IBus>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Flight deleted successfully!",
+      message: "Bus deleted successfully!",
       data: result,
     });
   }
 );
 
-export const FlightsController = {
-  createFlight,
-  getAllFlights,
-  getSingleFlight,
-  updateFlight,
-  deleteFlight,
+export const BusController = {
+  createBus,
+  getAllBus,
+  getSingleBus,
+  updateBus,
+  deleteBus,
 };
