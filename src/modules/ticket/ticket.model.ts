@@ -1,24 +1,24 @@
-import { Schema, model } from "mongoose";
-import { IBusModel, IBus } from "./ticket.interface";
+import { Mongoose, Schema, model } from "mongoose";
+import { ITicketModel, ITicket } from "./ticket.interface";
 
 
-const BusSchema = new Schema<IBus, object>(
+const TicketSchema = new Schema<ITicket, object>(
   {
     busId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required:true,
-      unique:true,
+      ref:"Bus"
     },
-    totalSeat: {
-      type: Number,
+    timeSlot: {
+      type: Date,
       required:true
     },
-    name: {
-      type: String,
+    price: {
+      type: Number,
       required:true,
     },
-    destination: {
-      type: String,
+    bookedSeats: {
+      type: [Number],
       required:true,
     }
   },
@@ -30,4 +30,4 @@ const BusSchema = new Schema<IBus, object>(
   }
 );
 
-export const BusModel = model<IBus,IBusModel>('Bus',BusSchema);
+export const TicketModel = model<ITicket,ITicketModel>('Ticket',TicketSchema);

@@ -2,10 +2,9 @@ import { Model, Types } from "mongoose";
 
 export type IBooking = {
     userId:Types.ObjectId;
-    flightId:Types.ObjectId;
-    totalPrice:number;
+    ticketId:Types.ObjectId;
+    price:number;
     seatNumber:number;
-    status:string;
 }
 
 export type IBookingModel = Model<IBooking,Record<string,unknown>>;

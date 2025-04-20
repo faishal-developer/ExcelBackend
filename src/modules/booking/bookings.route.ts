@@ -8,7 +8,7 @@ import { userRoles } from "../../utils/utils";
 const router = express.Router();
 
 router.post(
-  "/bookings",
+  "/tickets/purchase",
   validateRequest(BookingsZodValidataion.createBooking),
   auth([userRoles.user]),
   BookingsController.createBooking

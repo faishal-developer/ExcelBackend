@@ -1,35 +1,32 @@
 import { z } from "zod";
 
 
-const createBus = z.object({
+const createTicket = z.object({
   body: z.object({
     busId: z.string({
       required_error: "busId is require",
     }),
-    totalSeat: z.number({
-      required_error: "totalSeat is requireda and should be timestamps",
-    }),
-    name: z.string({
-      required_error: "name is required",
-    }),
-    destination:z.string({
-      required_error:"destination is required"
+    timeSlot: z.preprocess(
+      (arg) => (typeof arg === "string" || arg instanceof Date ? new Date(arg) : arg),
+      z.date()
+    ),
+    price: z.number({
+      required_error: "price is required",
     })
   }),
 });
 
 
-const updateBus = z.object({
+const updateTicket = z.object({
   body: z.object({
     busId: z.string().optional(),
-    totalSeat: z.number().optional(),
-    name: z.string().optional(),
-    destination: z.string().optional()
+    timeSlot: z.date().optional(),
+    price: z.number().optional()
   }),
 });
 
 
-export const BusZodValidataion={
-    createBus,
-    updateBus
+export const TicketZodValidataion={
+    createTicket,
+    updateTicket
 }

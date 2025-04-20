@@ -1,5 +1,5 @@
 
-export const BusSearchableFields=[
+export const TicketSearchableFields=[
     "destination",
     "totalSeat",
 ]

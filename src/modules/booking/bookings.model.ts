@@ -9,22 +9,19 @@ const BookingSchema = new Schema<IBooking, object>(
       ref: "User",
       required:true,
     },
-   flightId: {
+   ticketId: {
       type: Schema.Types.ObjectId,
-      required:true
+      required:true,
+      ref:"Ticket"
     },
-    totalPrice: {
+    price: {
       type: Number,
       required:true
     },
     seatNumber: {
       type: Number,
       required:true
-    },
-    status: {
-      type: String,
-      required:true
-    },
+    }
   },
   {
     timestamps: true,

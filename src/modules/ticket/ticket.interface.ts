@@ -1,13 +1,13 @@
-import { Model, Types } from "mongoose";
+import mongoose, { Model, mongo, Types } from "mongoose";
 
-export type IBus = {
-    busId:string,
-    totalSeat:number,
-    name:string,
-    destination:string,
+export type ITicket = {
+    busId:mongoose.Types.ObjectId,
+    timeSlot:Date,
+    price:number,
+    bookedSeats:number[],
 }
 
-export type IBusModel = Model<IBus,Record<string,unknown>>;
+export type ITicketModel = Model<ITicket,Record<string,unknown>>;
 
 export type IQueryData= {
     page?:string,

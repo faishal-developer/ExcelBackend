@@ -1,24 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import httpStatus from "http-status";
-import { IQueryData, IBus } from "./ticket.interface";
-import { BusModel } from "./ticket.model";
+import { IQueryData, ITicket } from "./ticket.interface";
+import { TicketModel } from "./ticket.model";
 import ApiError from "../../errorHandler/ApiError";
 import { calcSkip } from "../../shared/commonFunction";
 import { SortOrder } from "mongoose";
 import { maxNumber } from "../../utils/utils";
-import { BusSearchableFields } from "./ticket.constant";
+import { TicketSearchableFields } from "./ticket.constant";
 import { userService } from "../user/user.service";
 import { User } from "../user/user.model";
 
-const createBus = async (Bus: IBus): Promise<IBus | null> => {
-  const result = await BusModel.create(Bus);
+const createTicket = async (Ticket: ITicket): Promise<ITicket | null> => {
+  const targetTime = new Date(Ticket.timeSlot); // or some specific time
+  const twentyMinutesBefore = new Date(targetTime.getTime() - 20 * 60 * 1000);
+  const twentyMinutesAfter = new Date(targetTime.getTime() + 20 * 60 * 1000);
+
+  // if any timeslot exist +/-(20 min). it is not valid
+  const buses = await TicketModel.find({
+    timeSlot: {
+      $gte: twentyMinutesBefore,
+      $lte: twentyMinutesAfter,
+    },
+  });
+  if(buses.length>0){
+    throw new ApiError(httpStatus.CONFLICT, "This time slot is already taken");
+  }
+  Ticket.bookedSeats=[];
+  const result = await TicketModel.create(Ticket);
   return result;
 };
 
-const getAllBuss = async (
+const getAllTickets = async (
   queryData: Partial<IQueryData>
-): Promise<IBus[] | null> => {
+): Promise<ITicket[] | null> => {
   const {
     page,
     limit,
@@ -35,7 +50,7 @@ const getAllBuss = async (
   
   //searchTerm
     if (searchTerm) {
-        query['$or'] = BusSearchableFields.map((field) => ({
+        query['$or'] = TicketSearchableFields.map((field) => ({
           [field]: {
             $regex: searchTerm,
             $options: "i",
@@ -46,46 +61,63 @@ const getAllBuss = async (
   //sorting condition
   type TSort = "asc" | "desc";
   const sortCondition: { [key: string]: TSort } = {};
-  if (sortBy) {
-    sortCondition[sortBy] = (sortOrder as TSort) ?? "asc";
-  }
+    sortCondition["timeSlot"] = (sortOrder as TSort) ?? "desc";
 
-  const result = await BusModel.find(query)
+  const result = await TicketModel.find(query)
     .sort(sortCondition)
     .skip(pagination.skip)
     .limit(pagination.limit);
   return result;
 };
 
-const getSingleBus = async (id: string): Promise<IBus | null> => {
-  const result = await BusModel.findById({ _id: id });
+const getSingleTicket = async (id: string): Promise<ITicket | null> => {
+  const result = await TicketModel.findById({ _id: id });
   return result;
 };
 
-const updateBus = async (
+const updateTicket = async (
   id: string,
-  data: Partial<IBus>
-): Promise<IBus | null> => {
-  const isExist = await BusModel.findById({ _id: id });
+  data: Partial<ITicket>
+): Promise<ITicket | null> => {
+  const isExist = await TicketModel.findById({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Bus not found !");
+    throw new ApiError(httpStatus.NOT_FOUND, "Ticket not found !");
   }
-  const result = await BusModel.findOneAndUpdate({ _id: id }, data, {
+  if(data.bookedSeats){
+    throw new ApiError(httpStatus.METHOD_NOT_ALLOWED, "bookedSeats should not be modified");
+  }
+  if(data.timeSlot){
+    const targetTime = new Date(data.timeSlot); // or some specific time
+    const twentyMinutesBefore = new Date(targetTime.getTime() - 20 * 60 * 1000);
+    const twentyMinutesAfter = new Date(targetTime.getTime() + 20 * 60 * 1000);
+
+    // if any timeslot exist +/-(20 min). it is not valid
+    const buses = await TicketModel.find({
+      timeSlot: {
+        $gte: twentyMinutesBefore,
+        $lte: twentyMinutesAfter,
+      },
+    });
+    if(buses.length>0){
+      throw new ApiError(httpStatus.CONFLICT, "This time slot is already taken");
+    }
+  }
+  const result = await TicketModel.findOneAndUpdate({ _id: id }, data, {
     new: true,
   });
   return result;
 };
 
-const deleteBus = async (id: string): Promise<IBus | null> => {
-  const result = await BusModel.findByIdAndDelete({ _id: id });
+const deleteTicket = async (id: string): Promise<ITicket | null> => {
+  const result = await TicketModel.findByIdAndDelete({ _id: id });
   return result;
 };
 
-export const BusService = {
-  createBus,
-  getAllBuss,
-  getSingleBus,
-  updateBus,
-  deleteBus,
+export const TicketService = {
+  createTicket,
+  getAllTickets,
+  getSingleTicket,
+  updateTicket,
+  deleteTicket,
 };

@@ -5,15 +5,38 @@ import { IQueryData, IBooking } from "./bookings.interface";
 import { BookingModel } from "./bookings.model";
 import ApiError from "../../errorHandler/ApiError";
 import { calcSkip } from "../../shared/commonFunction";
-import { SortOrder } from "mongoose";
+import mongoose, { SortOrder } from "mongoose";
 import { maxNumber } from "../../utils/utils";
 import { BookingsSearchableFields } from "./bookings.constant";
 import { userService } from "../user/user.service";
 import { User } from "../user/user.model";
+import { TicketModel } from "../ticket/ticket.model";
+import { IBus } from "../bus/bus.interface";
 
 const createBooking = async (Booking: IBooking): Promise<IBooking | null> => {
+  const ticket = await TicketModel.findById({ _id: Booking.ticketId }).populate<{busId:IBus}>("busId");
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Ticket not found !");
+  }
+  if(ticket.price !== Booking.price){
+    throw new ApiError(httpStatus.BAD_REQUEST, "Price mismatch");
+  }
+  if(ticket.busId.totalSeat<Booking.seatNumber){
+    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid seat number");
+  }
   
+  if(ticket.bookedSeats?.find((seatNumber) => seatNumber === Booking.seatNumber)){
+    throw new ApiError(httpStatus.CONFLICT, "This seat is already taken");
+  }
+  const session = await mongoose.startSession();
+  session.startTransaction();
   const result = await BookingModel.create(Booking);
+  await TicketModel.findOneAndUpdate(
+    { _id: Booking.ticketId },
+    { $push: { bookedSeats: Booking.seatNumber } },
+    { session }
+  );
+  session.commitTransaction();
   return result;
 };
 

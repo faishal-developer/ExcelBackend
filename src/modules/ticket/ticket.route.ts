@@ -1,40 +1,40 @@
 import express from "express";
 import { validateRequest } from "../../middleWares/validateRequests";
-import { BusZodValidataion } from "./ticket.validation";
-import { BusController } from "./ticket.controller";
+import { TicketZodValidataion } from "./ticket.validation";
+import { TicketController } from "./ticket.controller";
 import { auth } from "../../shared/Authorization";
 import { userRoles } from "../../utils/utils";
 
 const router = express.Router();
 
 router.post(
-  "/admin/bus",
-  validateRequest(BusZodValidataion.createBus),
+  "/admin/ticket",
+  validateRequest(TicketZodValidataion.createTicket),
   auth([userRoles.admin]),
-  BusController.createBus
+  TicketController.createTicket
 );
 
 router.get(
-  "/bus/:id", 
+  "/ticket/:id", 
   auth([userRoles.admin,userRoles.user]),
-  BusController.getSingleBus
+  TicketController.getSingleTicket
 );
 router.delete(
-  "/admin/bus/:id", 
+  "/admin/ticket/:id", 
   auth([userRoles.admin]), 
-  BusController.deleteBus
+  TicketController.deleteTicket
 );
 router.put(
-  "/admin/bus/:id",
-  validateRequest(BusZodValidataion.updateBus),
+  "/admin/ticket/:id",
+  validateRequest(TicketZodValidataion.updateTicket),
   auth([userRoles.admin]),
-  BusController.updateBus
+  TicketController.updateTicket
 );
 
 router.get(
-  "/bus", 
+  "/ticket", 
   auth([userRoles.admin,userRoles.user]),
-  BusController.getAllBus
+  TicketController.getAllTicket
 );
 
-export const BusRoutes = router;
+export const TicketRoutes = router;
