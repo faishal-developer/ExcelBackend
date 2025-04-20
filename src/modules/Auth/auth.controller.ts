@@ -15,6 +15,8 @@ const login = catchAsync(
         secure:config.env==='production',
         httpOnly:true,
     }
+    console.log("testing");
+    
     res.cookie('refreshToken',refreshToken,cookieOptions);
     delete others.user?.password;
     sendResponse<Partial<AuthServiceresponseType>>(res, {

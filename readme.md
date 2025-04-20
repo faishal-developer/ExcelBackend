@@ -49,6 +49,8 @@ src/ ├── app.ts # Express app configuration ├── server.ts # Server e
 - Purchase tickets for specific buses and times
 
 ### ✅ Additional Highlights
+- # Added Rate limiting 
+- # prevented nosql injection and sanitization
 - API versioning with `/api/v1`
 - Global middlewares for:
   - Error handling

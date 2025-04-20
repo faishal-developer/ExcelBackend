@@ -9,6 +9,8 @@ import { AdminRoutes } from "./modules/admin/admin.route";
 import { AuthRoutes } from "./modules/Auth/auth.route";
 import { BusRoutes } from "./modules/bus/bus.route";
 import { TicketRoutes } from "./modules/ticket/ticket.route";
+import { globalRateLimiter } from "./middleWares/rateLimiter";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 
 const app:Application = express();
 app.use(cors());
@@ -17,6 +19,12 @@ app.use(cookieParser());
 //parser
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
+// rate limiting
+app.use(globalRateLimiter)
+
+// prevent nosql injection
+app.use(ExpressMongoSanitize());
 
 //routes
 app.get('/',(_req:Request,res:Response)=>{
