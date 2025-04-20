@@ -6,7 +6,30 @@ A backend system for managing bus tickets with user authentication, role-based a
 
 ## 📁 Project Structure
 
-src/ ├── app.ts # Express app configuration ├── server.ts # Server entry point ├── modules/ # Feature-based modules │ ├── user/ # User model, controller, routes, services │ ├── bus/ # Bus model, controller, routes, services │ ├── ticket/ # Ticket model, controller, routes, services │ └── booking/ # Booking model, controller, routes, services ├── middlewares/ # Global middlewares (auth, error handling, etc.) ├── utils/ # Utility functions └── config/ # Config files (DB, env)
+src/ ├── app.ts # Express app configuration ├── server.ts # Server entry point ├── modules/ 
+# Feature-based modules │ 
+    ├── user/ # 
+            User model, 
+            controller, 
+            routes, 
+            services │ 
+    ├── bus/ # 
+            Bus model, 
+            controller, 
+            routes, 
+            services │ 
+    ├── ticket/ # 
+            Ticket model, 
+            controller, 
+            routes, 
+            services │ 
+    └── booking/ # 
+            Booking model, 
+            controller, 
+            routes, 
+            services 
+    ├── middlewares/ # Global middlewares (auth, error handling, etc.) 
+    ├── utils/ # Utility functions └── config/ # Config files (DB, env)
 ---
 
 ## 🚀 Features
